@@ -1,0 +1,7 @@
+Howdy,
+
+You have been invited to join {{ site.name }}.
+
+Click the following link or copy it into your browser to get started!
+
+http://{{ site.domain }}{% url invitation_accepted invitation.code %}

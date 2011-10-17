@@ -1,0 +1,33 @@
+{% extends 'website/base.html' %}
+
+{% load golfrace %}
+
+{% block title %}Create your account | {{ site.name }}{% endblock %}
+
+{% block subnav_class %}no_sub_nav{% endblock %}
+
+{% block main %}
+	
+	<h2>Jon Bolt has invited you to join the BagelShake league</h2>
+
+	<form action="" method="post"  id="update_password_form_wrapper" class="invite_signup grid_5 alpha">
+
+		<p class="microcopy">Before you can get started, you'll need to create an account:</p>
+	
+		{% csrf_token %}
+
+		{% form_field form.username %}
+
+		{% form_field form.handicap %}
+
+		{% form_field form.password %}
+
+		<div class="clear">&nbsp;</div>
+
+		<input type="submit" class="button shadow" value="Create Account">
+
+	</form>
+	
+	<div class="grid_5 info_box omega" style="height: 300px; background: #f5f5f5">Benefits</div>
+			
+{% endblock %}
