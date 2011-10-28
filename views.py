@@ -7,11 +7,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ImproperlyConfigured
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template
 from django.utils.importlib import import_module
+
 
 from signals import invitation_accepted_signal
 from models import Invitation
@@ -20,7 +22,7 @@ def get_form():
 
 	try:
 
-		path = getattr(settings, 'INVITATION_FORM', 'tgr.invitation.forms.Invitation_Form')
+		path = getattr(settings, 'INVITATION_FORM', 'bagelinvite.forms.Invitation_Form')
 
 		mod_name, klass_name = path.rsplit('.', 1)
 	
@@ -96,6 +98,8 @@ def invitation_accepted(request,
 			user = authenticate(username = invitation.to_user.username, password = password)
 
 			login(request, user)
+			
+			return HttpResponseRedirect(user.get_profile().get_absolute_url())
 	
 			# Redirect the user to their new account page
 			return HttpResponseRedirect('/')
