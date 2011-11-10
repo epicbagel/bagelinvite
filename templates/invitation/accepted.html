@@ -1,33 +1,37 @@
-{% extends 'website/base.html' %}
+{% extends 'landing_page.html' %}
 
-{% load golfrace %}
+{% load core %}
 
 {% block title %}Create your account | {{ site.name }}{% endblock %}
 
 {% block subnav_class %}no_sub_nav{% endblock %}
 
 {% block main %}
+
+	<div class="row">
+		
+		<div class="span12">
 	
-	<h2>Jon Bolt has invited you to join the BagelShake league</h2>
-
-	<form action="" method="post"  id="update_password_form_wrapper" class="invite_signup grid_5 alpha">
-
-		<p class="microcopy">Before you can get started, you'll need to create an account:</p>
+			<h2>You've been invited to play in the golf club in the world </h2>
 	
-		{% csrf_token %}
+			<p class="tagline">The premise is simple: Link up. Play and record. Win.</p>
 
-		{% form_field form.username %}
+			<form action="{{ request.path }}" method="post" id="update_password_form_wrapper" class="invite_signup form-stacked">
 
-		{% form_field form.handicap %}
+				{% csrf_token %}
+		
+				{% for field in form %}
 
-		{% form_field form.password %}
+					{% render_field field %}
+		
+				{% endfor %}
 
-		<div class="clear">&nbsp;</div>
+				<input type="submit" class="btn primary large" value="Create Account">
 
-		<input type="submit" class="button shadow" value="Create Account">
-
-	</form>
-	
-	<div class="grid_5 info_box omega" style="height: 300px; background: #f5f5f5">Benefits</div>
+			</form>
+			
+		</div>
+			
+	</div>
 			
 {% endblock %}

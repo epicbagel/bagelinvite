@@ -41,15 +41,7 @@ def get_form():
 		raise ImproperlyConfigured(('Module "%s" does not define a ''"%s" class' % (mod_name, klass_name)))
 
 @transaction.commit_on_success
-def invitation_accepted(request, 
-
-		invitation_code, 
-		
-		success_url = settings.LOGIN_REDIRECT_URL, 
-		
-		template_name = 'invitation/accepted.html'
-		
-	):	
+def invitation_accepted(request, invitation_code, success_url = settings.LOGIN_REDIRECT_URL, template_name = 'invitation/accepted.html'):	
 	
 	form_class = get_form()
 	
@@ -85,24 +77,28 @@ def invitation_accepted(request,
 			# Send signal for new invitation
 			invitation_accepted_signal.send_robust(sender = None, invitation = invitation, user = to_user, form = form)
 
+			# Set the password
 			password = form.cleaned_data['password']
 
 			to_user.set_password(password)
 
 			to_user.save()
 
-			invitation.used = True
-
-			invitation.save()
+			# Delete the invitation now they've signed up
+			invitation.delete()
 
 			user = authenticate(username = invitation.to_user.username, password = password)
 
 			login(request, user)
 			
-			return HttpResponseRedirect(user.get_profile().get_absolute_url())
+			try:
+			
+				return HttpResponseRedirect(user.get_profile().get_absolute_url())
 	
-			# Redirect the user to their new account page
-			return HttpResponseRedirect('/')
+			except AttributeError:
+	
+				# Redirect the user to their new account page
+				return HttpResponseRedirect('/')
 
 	else:
 		
