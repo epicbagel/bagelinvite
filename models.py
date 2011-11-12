@@ -53,6 +53,8 @@ class Invitation(models.Model):
 	used = models.BooleanField(default = False)
 	
 	to_user = models.ForeignKey(User)
+	
+	from_user = models.ForeignKey(User, related_name = 'from_user')
 
 	objects = InvitationManager()
 
@@ -85,7 +87,9 @@ class Invitation(models.Model):
 			
 			'expiration_days': getattr(settings, 'ACCOUNT_INVITATION_DAYS', 30),
 			
-			'site': current_site
+			'site': current_site,
+			
+			'from_user' : self.from_user,
 			
 		})
 
