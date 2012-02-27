@@ -14,7 +14,7 @@ __all__ = ['Invitation']
 
 class InvitationManager(models.Manager):
 	
-	def create_invitation(self, to_user):
+	def create_invitation(self, to_user, from_user = None):
 		"""
 		Create an ``Invitation`` and returns it.
 		
@@ -22,6 +22,11 @@ class InvitationManager(models.Manager):
 		from a combination of the ``User``'s username and a random salt.
 		"""
 		kwargs = {'to_user': to_user}
+		
+		# Register from user
+		if from_user:
+			
+			kwargs.update({'from_user': from_user})
 		
 		date_invited = datetime.datetime.now()
 		
