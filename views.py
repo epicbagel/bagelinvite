@@ -87,7 +87,7 @@ def invitation_accepted(request, invitation_code, success_url = settings.LOGIN_R
 			# Delete the invitation now they've signed up
 			invitation.delete()
 
-			user = authenticate(username = invitation.to_user.username, password = password)
+			user = authenticate(username = to_user.username, password = password)
 
 			login(request, user)
 			
